@@ -1,0 +1,221 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/api/v1/buildings": {
+            "get": {
+                "description": "Returns a list of all buildings with the ability to filter by city, year, and number of floors",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "buildings"
+                ],
+                "summary": "Get all buildings with filtering",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "City",
+                        "name": "city",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Year",
+                        "name": "year",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of floors",
+                        "name": "floors",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Limit of results",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 0,
+                        "description": "Offset for pagination",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/githib_com_s4bb4t_leadgen_internal_lib_models.Buildings"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Creates a new building with the provided data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "buildings"
+                ],
+                "summary": "Create a new building",
+                "parameters": [
+                    {
+                        "description": "Building data",
+                        "name": "building",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/githib_com_s4bb4t_leadgen_internal_lib_models.Building"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/githib_com_s4bb4t_leadgen_internal_lib_models.Building"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/buildings/{title}": {
+            "get": {
+                "description": "Returns information about a building by its title",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "buildings"
+                ],
+                "summary": "Get a building by title",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Building title",
+                        "name": "title",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/githib_com_s4bb4t_leadgen_internal_lib_models.Building"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "githib_com_s4bb4t_leadgen_internal_lib_models.Building": {
+            "type": "object",
+            "required": [
+                "city",
+                "floors",
+                "title",
+                "year"
+            ],
+            "properties": {
+                "city": {
+                    "type": "string",
+                    "maxLength": 60,
+                    "minLength": 2
+                },
+                "floors": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string",
+                    "maxLength": 60,
+                    "minLength": 2
+                },
+                "year": {
+                    "type": "integer"
+                }
+            }
+        },
+        "githib_com_s4bb4t_leadgen_internal_lib_models.Buildings": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/githib_com_s4bb4t_leadgen_internal_lib_models.Building"
+                    }
+                },
+                "meta": {
+                    "$ref": "#/definitions/githib_com_s4bb4t_leadgen_internal_lib_models.BuildingsMeta"
+                }
+            }
+        },
+        "githib_com_s4bb4t_leadgen_internal_lib_models.BuildingsMeta": {
+            "type": "object",
+            "properties": {
+                "query": {
+                    "$ref": "#/definitions/githib_com_s4bb4t_leadgen_internal_lib_models.Query"
+                },
+                "total_amount": {
+                    "type": "integer"
+                }
+            }
+        },
+        "githib_com_s4bb4t_leadgen_internal_lib_models.Query": {
+            "type": "object",
+            "properties": {
+                "city": {
+                    "type": "string"
+                },
+                "floors": {
+                    "type": "integer"
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "offset": {
+                    "type": "integer"
+                },
+                "year": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}

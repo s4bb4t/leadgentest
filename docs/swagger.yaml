@@ -1,0 +1,147 @@
+definitions:
+  githib_com_s4bb4t_leadgen_internal_lib_models.Building:
+    properties:
+      city:
+        maxLength: 60
+        minLength: 2
+        type: string
+      floors:
+        type: integer
+      title:
+        maxLength: 60
+        minLength: 2
+        type: string
+      year:
+        type: integer
+    required:
+    - city
+    - floors
+    - title
+    - year
+    type: object
+  githib_com_s4bb4t_leadgen_internal_lib_models.Buildings:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/githib_com_s4bb4t_leadgen_internal_lib_models.Building'
+        type: array
+      meta:
+        $ref: '#/definitions/githib_com_s4bb4t_leadgen_internal_lib_models.BuildingsMeta'
+    type: object
+  githib_com_s4bb4t_leadgen_internal_lib_models.BuildingsMeta:
+    properties:
+      query:
+        $ref: '#/definitions/githib_com_s4bb4t_leadgen_internal_lib_models.Query'
+      total_amount:
+        type: integer
+    type: object
+  githib_com_s4bb4t_leadgen_internal_lib_models.Query:
+    properties:
+      city:
+        type: string
+      floors:
+        type: integer
+      limit:
+        type: integer
+      offset:
+        type: integer
+      year:
+        type: integer
+    type: object
+info:
+  contact: {}
+paths:
+  /api/v1/buildings:
+    get:
+      consumes:
+      - application/json
+      description: Returns a list of all buildings with the ability to filter by city,
+        year, and number of floors
+      parameters:
+      - description: City
+        in: query
+        name: city
+        type: string
+      - description: Year
+        in: query
+        name: year
+        type: integer
+      - description: Number of floors
+        in: query
+        name: floors
+        type: integer
+      - default: 10
+        description: Limit of results
+        in: query
+        name: limit
+        type: integer
+      - default: 0
+        description: Offset for pagination
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/githib_com_s4bb4t_leadgen_internal_lib_models.Buildings'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get all buildings with filtering
+      tags:
+      - buildings
+    post:
+      consumes:
+      - application/json
+      description: Creates a new building with the provided data
+      parameters:
+      - description: Building data
+        in: body
+        name: building
+        required: true
+        schema:
+          $ref: '#/definitions/githib_com_s4bb4t_leadgen_internal_lib_models.Building'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/githib_com_s4bb4t_leadgen_internal_lib_models.Building'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Create a new building
+      tags:
+      - buildings
+  /api/v1/buildings/{title}:
+    get:
+      consumes:
+      - application/json
+      description: Returns information about a building by its title
+      parameters:
+      - description: Building title
+        in: path
+        name: title
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/githib_com_s4bb4t_leadgen_internal_lib_models.Building'
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: Get a building by title
+      tags:
+      - buildings
+swagger: "2.0"
