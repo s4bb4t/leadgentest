@@ -47,4 +47,3 @@ The connection to the PostgreSQL database is configured via a `config` file with
 - **Phone**: +7 (913) 475-08-87 (preferred method of contact)
 - **Email**: s4bb4t@yandex.ru
 - **Telegram**: [@s4bb4t](https://t.me/s4bb4t)
-```
