@@ -143,9 +143,6 @@ func (repo *Repo) Buildings(ctx context.Context, query models.Query) (models.Bui
 	if query.Limit == 0 {
 		query.Limit = 10
 	}
-	if query.Offset == 0 {
-		query.Offset = 0
-	}
 
 	if query.Limit > 0 {
 		argIdx++
