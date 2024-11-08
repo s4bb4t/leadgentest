@@ -140,7 +140,7 @@ func (repo *Repo) Buildings(ctx context.Context, query models.Query) (models.Bui
 		countQuery += whereSQL
 	}
 
-	if query.Limit == 0 {
+	if query.Limit <= 0 {
 		query.Limit = 10
 	}
 
