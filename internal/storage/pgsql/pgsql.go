@@ -144,17 +144,15 @@ func (repo *Repo) Buildings(ctx context.Context, query models.Query) (models.Bui
 		query.Limit = 10
 	}
 
-	if query.Limit > 0 {
-		argIdx++
-		all.Meta.Query.Limit = query.Limit
-		baseQuery += fmt.Sprintf(" LIMIT $%d", argIdx)
-		args = append(args, query.Limit)
-	}
+ all.Meta.Query.Limit = query.Limit
+ argIdx++
+	baseQuery += fmt.Sprintf(" LIMIT $%d", argIdx)
 
-	argIdx++
-	all.Meta.Query.Offset = query.Offset
+ all.Meta.Query.Offset = query.Offset
+ argIdx++
 	baseQuery += fmt.Sprintf(" OFFSET $%d", argIdx)
-	args = append(args, query.Offset*query.Limit)
+
+	args = append(args, query.Limit, query.Offset*query.Limit)
 
 	rows, err := repo.Db.QueryContext(ctx, baseQuery, args...)
 	if err != nil {
