@@ -22,6 +22,7 @@ func Run(logger *slog.Logger, storage storage.RepositoryI) {
 		Log:  logger,
 		Repo: storage,
 	}
+	defer api.Repo.Close()
 
 	r := gin.Default()
 
@@ -39,9 +40,12 @@ func Run(logger *slog.Logger, storage storage.RepositoryI) {
 	}
 
 	api.Log.Info("Starting Server")
+
 	if err := r.Run("localhost:8080"); err != nil {
 		logger.Error("Unable to start server", err)
 	}
+
+	api.Log.Info("Server stopped")
 }
 
 // CreateBuilding godoc

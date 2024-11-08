@@ -42,10 +42,12 @@ func Connect(cfg *config.Config) (RepositoryI, error) {
 		return nil, fmt.Errorf("%s: %w", op, err)
 	}
 
-	//err = goose.Up(storage.Db, "./internal/migrations")
-	//if err != nil {
-	//	return nil, fmt.Errorf("%s: failed to apply migrations: %w", op, err)
-	//}
+	/*
+		err = goose.Up(storage.Db, "./internal/migrations")
+		if err != nil {
+			return nil, fmt.Errorf("%s: failed to apply migrations: %w", op, err)
+		}
+	*/
 
 	if err := storage.LoadStmts(); err != nil {
 		return nil, fmt.Errorf("%s: failed to load statements: %w", op, err)
@@ -107,14 +109,12 @@ func (repo *Repo) Buildings(ctx context.Context, query models.Query) (models.Bui
 	var all models.Buildings
 	var row models.Building
 
-	// Базовый запрос и запрос для подсчета
 	baseQuery := "SELECT Title, city, floors, year FROM public.buildings"
 	countQuery := "SELECT COUNT(*) FROM public.buildings"
 	var whereClauses []string
 	var args []any
 	argIdx := 0
 
-	// Применение условий по городам, этажам и году, если они заданы
 	if query.City != "" {
 		argIdx++
 		whereClauses = append(whereClauses, fmt.Sprintf("city = $%d", argIdx))
@@ -144,12 +144,12 @@ func (repo *Repo) Buildings(ctx context.Context, query models.Query) (models.Bui
 		query.Limit = 10
 	}
 
- all.Meta.Query.Limit = query.Limit
- argIdx++
+	all.Meta.Query.Limit = query.Limit
+	argIdx++
 	baseQuery += fmt.Sprintf(" LIMIT $%d", argIdx)
 
- all.Meta.Query.Offset = query.Offset
- argIdx++
+	all.Meta.Query.Offset = query.Offset
+	argIdx++
 	baseQuery += fmt.Sprintf(" OFFSET $%d", argIdx)
 
 	args = append(args, query.Limit, query.Offset*query.Limit)
