@@ -18,14 +18,7 @@ type Repo struct {
 	Db *sql.DB
 }
 
-type RepositoryI interface {
-	Save(context.Context, models.Building) (models.Building, error)
-	Building(context.Context, string) (models.Building, error)
-	Buildings(context.Context, models.Query) (models.Buildings, error)
-	Close() error
-}
-
-func Connect(cfg *config.Config) (RepositoryI, error) {
+func Connect(cfg *config.Config) (*Repo, error) {
 	const op = "storage.postgres.Connect"
 
 	dbStr := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
